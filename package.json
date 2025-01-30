@@ -1,6 +1,6 @@
 {
 	"name": "@edgefirst-dev/batcher",
-	"version": "0.0.3",
+	"version": "1.0.0",
 	"description": "A simpler batcher for any async function",
 	"license": "MIT",
 	"funding": [
