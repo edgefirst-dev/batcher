@@ -1,13 +1,12 @@
 import type { Jsonifiable } from "type-fest";
 
 /**
- * This is our batcher implementation. It is a class that allows us to batch
- * function calls that are identical within a certain time window. This is
- * useful for reducing API calls to external services, for example.
+ * A class that allows us to batch function calls that are identical within a
+ * certain time window. This is useful for reducing API calls to external
+ * services, for example.
  *
- * The Batcher class has a cache property that stores the results of the
- * function calls. It also has a timeouts property that stores the timeouts
- * for each function call. The batchWindow property is the time window in
+ * The Batcher class has an internal `cache` that stores the results of the
+ * function calls. The `batchWindow` property is the time window in
  * milliseconds that we use to batch the function calls.
  *
  * The call method takes an array of values as key and an async function fn.
@@ -34,7 +33,6 @@ import type { Jsonifiable } from "type-fest";
  */
 export class Batcher {
 	protected readonly cache = new Map<string, Promise<unknown>>();
-	protected readonly timeouts = new Map<string, Timer>();
 
 	/**
 	 * Creates a new instance of the Batcher.
@@ -63,16 +61,13 @@ export class Batcher {
 		let promise = new Promise<TResult>((resolve, reject) => {
 			let timeout = setTimeout(async () => {
 				try {
-					let result = await fn();
-					resolve(result);
+					resolve(await fn());
 				} catch (error) {
 					reject(error);
 				} finally {
-					this.timeouts.delete(cacheKey);
+					this.cache.delete(cacheKey);
 				}
 			}, this.batchWindow);
-
-			this.timeouts.set(cacheKey, timeout);
 		});
 
 		this.cache.set(cacheKey, promise);
