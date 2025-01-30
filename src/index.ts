@@ -6,8 +6,7 @@ import type { Jsonifiable } from "type-fest";
  * services, for example.
  *
  * The Batcher class has an internal `cache` that stores the results of the
- * function calls. The `batchWindow` property is the time window in
- * milliseconds that we use to batch the function calls.
+ * function calls.
  *
  * The call method takes an array of values as key and an async function fn.
  * It converts the key to a string and stores it in the cache. If the cache
@@ -58,17 +57,7 @@ export class Batcher {
 			return this.cache.get(cacheKey) as Promise<TResult>;
 		}
 
-		let promise = new Promise<TResult>((resolve, reject) => {
-			let timeout = setTimeout(async () => {
-				try {
-					resolve(await fn());
-				} catch (error) {
-					reject(error);
-				} finally {
-					this.cache.delete(cacheKey);
-				}
-			}, this.batchWindow);
-		});
+		let promise = fn();
 
 		this.cache.set(cacheKey, promise);
 

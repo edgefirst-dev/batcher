@@ -1,5 +1,4 @@
 import { expect, mock, test } from "bun:test";
-import { setImmediate } from "node:timers/promises";
 
 import { Batcher } from ".";
 
@@ -48,30 +47,4 @@ test("caches results and return the same value", async () => {
 	]);
 
 	expect(value1).toBe(value2);
-});
-
-test("calls the function again after the cache expires", async () => {
-	let fn = mock().mockImplementation(() => Promise.resolve());
-	let batcher = new Batcher(0);
-
-	await batcher.call(["key"], fn);
-
-	await setImmediate();
-
-	await batcher.call(["key"], fn);
-
-	expect(fn).toHaveBeenCalledTimes(2);
-});
-
-test("calls the function again after the cache expires with a different key", async () => {
-	let fn = mock().mockImplementation(() => Promise.resolve());
-	let batcher = new Batcher(0);
-
-	await batcher.call(["key1"], fn);
-
-	await setImmediate();
-
-	await batcher.call(["key2"], fn);
-
-	expect(fn).toHaveBeenCalledTimes(2);
 });
