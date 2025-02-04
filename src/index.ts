@@ -17,7 +17,7 @@ import type { Jsonifiable } from "type-fest";
  * timeouts property.
  *
  * @example
- * let batcher = new Batcher(10);
+ * let batcher = new Batcher();
  * let [value1, value2] = await Promise.all([
  *   batcher.call(["key"], async () => {
  *     await new Promise((resolve) => setTimeout(resolve, 5));
@@ -32,12 +32,6 @@ import type { Jsonifiable } from "type-fest";
  */
 export class Batcher {
 	protected readonly cache = new Map<string, Promise<unknown>>();
-
-	/**
-	 * Creates a new instance of the Batcher.
-	 * @param batchWindow The time window (in milliseconds) to batch function calls.
-	 */
-	constructor(protected batchWindow?: number) {}
 
 	/**
 	 * Calls a function with batching, ensuring multiple identical calls within a time window execute only once.
