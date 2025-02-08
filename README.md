@@ -15,7 +15,7 @@ import { Batcher } from "@edgefirst-dev/batcher";
 
 // Configure the time window for the batcher
 // The batcher will call the async function only once for the same key in this time window
-let batcher = new Batcher<number, string>(10);
+let batcher = new Batcher<number, string>();
 
 async function asyncFunction(): Promise<string> {
   await new Promise((resolve) => setTimeout(resolve, 1000));
