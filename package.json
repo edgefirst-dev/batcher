@@ -41,7 +41,7 @@
 		"./package.json": "./package.json"
 	},
 	"dependencies": {
-		"type-fest": "^4.33.0"
+		"type-fest": "^5.0.0"
 	},
 	"peerDependencies": {},
 	"devDependencies": {
